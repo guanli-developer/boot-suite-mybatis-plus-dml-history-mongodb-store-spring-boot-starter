@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import tech.guanli.boot.data.mybatis.plus.dml.history.component.UpdateAuditor;
 import tech.guanli.boot.data.mybatis.plus.dml.history.storage.mongo.model.DeleteHistoryDocument;
@@ -38,9 +39,10 @@ public abstract class AbstractUpdateHistoryMongoStorage implements UpdateAuditor
 	private DataSource dataSource;
 
 	@Getter(value = AccessLevel.PRIVATE)
+	@Setter(value = AccessLevel.PROTECTED)
 	private Object operator;
 
-	protected abstract Object setOperator(Object operator);
+	protected abstract void setOperator();
 
 	private String fixSql(String sql) {
 		StringBuilder querySqlBuilder = new StringBuilder();
@@ -58,6 +60,7 @@ public abstract class AbstractUpdateHistoryMongoStorage implements UpdateAuditor
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement prepareStatement = connection.prepareStatement(fixSql(sql));
 				ResultSet resultSet = prepareStatement.executeQuery();) {
+			setOperator();
 			ResultSetMetaData metaData = resultSet.getMetaData();
 			JsonNodeFactory jsonNodeFactory = JsonNodeFactory.instance;
 			int columnCount = metaData.getColumnCount();

@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import tech.guanli.boot.data.mybatis.plus.dml.history.component.DeleteAuditor;
 import tech.guanli.boot.data.mybatis.plus.dml.history.storage.mongo.model.DeleteHistoryDocument;
@@ -37,9 +38,10 @@ public abstract class AbstractDeleteHistoryMongoStorage implements DeleteAuditor
 	private DataSource dataSource;
 
 	@Getter(value = AccessLevel.PRIVATE)
+	@Setter(value = AccessLevel.PROTECTED)
 	private Object operator;
 
-	protected abstract Object setOperator(Object operator);
+	protected abstract void setOperator();
 
 	private String fixSql(String sql) {
 		return sql.replace("DELETE FROM", "SELECT * FROM");
@@ -50,6 +52,7 @@ public abstract class AbstractDeleteHistoryMongoStorage implements DeleteAuditor
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement prepareStatement = connection.prepareStatement(fixSql(sql));
 				ResultSet resultSet = prepareStatement.executeQuery();) {
+			setOperator();
 			ResultSetMetaData metaData = resultSet.getMetaData();
 			JsonNodeFactory jsonNodeFactory = JsonNodeFactory.instance;
 			int columnCount = metaData.getColumnCount();
@@ -112,6 +115,7 @@ public abstract class AbstractDeleteHistoryMongoStorage implements DeleteAuditor
 				deleteHistoryDocument.setHistoryData(historyData);
 				deleteHistoryDocument.setOperateTime(LocalDateTime.now());
 				deleteHistoryDocument.setOperateType(DeleteHistoryDocument.DELETE_OPERATE);
+				log.info("operator: {}", getOperator());
 				deleteHistoryDocument.setOperator(getOperator());
 				deleteHistoryDocument.setTable(metaData.getTableName(1));
 				mongoTemplate.save(deleteHistoryDocument);

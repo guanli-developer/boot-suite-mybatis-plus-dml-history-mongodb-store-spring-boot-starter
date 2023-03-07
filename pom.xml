@@ -6,7 +6,7 @@
 		<version>1.0.1-RELEASE</version>
 	</parent>
 	<artifactId>mybatis-plus-dml-history-mongodb-store-spring-boot-starter</artifactId>
-	<version>1.0.1-RELEASE</version>
+	<version>1.0.2-RELEASE</version>
 	<dependencies>
 		<dependency>
 			<groupId>tech.guanli.boot.suite</groupId>
