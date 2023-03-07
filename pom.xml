@@ -3,15 +3,15 @@
 	<parent>
 		<groupId>tech.guanli.boot.suite</groupId>
 		<artifactId>springboot-starter-parent</artifactId>
-		<version>1.0.1-RELEASE</version>
+		<version>1.0.2-RELEASE</version>
 	</parent>
 	<artifactId>mybatis-plus-dml-history-mongodb-store-spring-boot-starter</artifactId>
-	<version>1.0.2-RELEASE</version>
+	<version>1.0.3-RELEASE</version>
 	<dependencies>
 		<dependency>
 			<groupId>tech.guanli.boot.suite</groupId>
 			<artifactId>mybatis-plus-dml-history-spring-boot-starter</artifactId>
-			<version>1.0.0-RELEASE</version>
+			<version>1.0.1-RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
